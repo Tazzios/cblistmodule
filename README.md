@@ -1,5 +1,5 @@
 
-# Community Builder  List for Community Builder
+# Community Builder user list module
 
 ## Description
 The purpose of this module is to present a Community Builder list of Users with a custom presentation-template with the possibility of using/presenting all user fields from CB and Joomla.
