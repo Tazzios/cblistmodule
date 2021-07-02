@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.1.0" client="site" method="upgrade">
+    <name>Community Builder list module</name>
+    <author>Tazzios</author>
+    <authorUrl>https://github.com/Tazzios</authorUrl>
+    <version>3.0</version>
+    <creationDate>2021-07-02</creationDate>
+    <license>GNU General Public License version 2 or later</license>
+    <description>Displaying Users from a selected CB List in a Module.</description>
+    <files>
+        <filename>mod_cblistmodule.xml</filename>
+        <filename module="mod_cblistmodule">mod_cblistmodule.php</filename>
+        <filename>index.html</filename>
+        <filename>helper.php</filename>
+        <filename>tmpl/default.php</filename>
+        <filename>tmpl/index.html</filename>
+    </files>
+	<languages folder="language">
+    <language tag="en-GB">en-GB.mod_cblistmodule.ini</language>
+    </languages>
+    <config>
+    	<fields name="params">
+    		<fieldset name="basic">
+       			<field
+               		name="listid"
+               		type="sql"
+               		default=""
+               		label="SELECT the CB List to be presented in the module"
+               		key_field="listid"
+               		value_field="title"
+               		query="SELECT listid, title FROM #__comprofiler_lists where published=1" />
+		<field
+			name="user-limit"
+			
+			filter="integer" 
+			
+			default="10"
+			label="Number of users to show"	/>
+			<field
+               		name="orderby"
+               		type="sql"
+               		default="list default"
+               		label="Order by field"
+               		key_field="id"
+               		value_field="title"
+               		query="SELECT 0 AS sort, 'list_default' AS id, 'List default' AS title UNION SELECT 1 AS sort, name AS id, name AS title FROM #__comprofiler_fields WHERE published=1 ORDER BY sort,title ASC" />
+			<field 
+					name="sortorder" type="list"
+					default="list"
+					label="Sort order"
+				>
+				<option value="list_default">List default</option>
+				<option value="asc">Ascending </option>
+				<option value="desc">Descending</option>
+				<option value="random">Random</option>				
+			</field>	
+                  <field
+                		name="text-above"
+                		type="editor"
+                		label="Text to be included ABOVE the user list."
+ 					        buttons="false"
+ 					        filter="raw" />
+		<field 
+			name="columns" type="list"
+			default="0"
+			label="Number of columns"
+			>
+				<option value="0">Responsive auto-fit</option>
+				<option value="1">1</option>
+				<option value="2">2</option>
+				<option value="3">3</option>
+				<option value="4">4</option>
+				<option value="5">5</option>
+				<option value="6">6</option>
+				<option value="7">7</option>
+				<option value="8">8</option>
+				<option value="9">9</option>
+				<option value="10">10</option>							
+		</field>
+		<field 
+		name="Minwidth" 
+		type="text" default="5" 
+		label="Minimum width column (rem)"
+		filter="integer" 		
+		description=""/>
+		
+		<field
+		name="template"
+		type="editor"
+		label="Template for displaying each user. Use [cb_fieldname] syntax to include fields."
+			buttons="false"
+			default="&lt;div class=&quot;yourclasstostyle&quot;&gt;[show_avatar]&lt;/div&gt;&lt;div class=&quot;yourclasstostyle&quot;&gt;[Linked_name]&lt;/div&gt;"
+			filter="raw" />
+			
+				<field
+				name="rules"
+				type="subform"
+				default='{&quot;rules0&quot;:{&quot;tag_name&quot;:&quot;show_avatar&quot;,&quot;htmlcode&quot;:&quot;&lt;a href=\&quot;cb-profile\/[user_id]\&quot;&gt;&lt;img src=\&quot;[avatar]\&quot; alt=\&quot;[name]\&quot; title=\&quot;[name]\&quot; width=\&quot;80\&quot; height=\&quot;80\&quot; \/&gt;&lt;\/a&gt;&quot;,&quot;htmlcode_no&quot;:&quot;Not used with a custom tag name&quot;},&quot;rules3&quot;:{&quot;tag_name&quot;:&quot;avatar&quot;,&quot;htmlcode&quot;:&quot;[avatar]&quot;,&quot;htmlcode_no&quot;:&quot;components\/com_comprofiler\/plugin\/templates\/default\/images\/avatar\/tnnophoto_n.png&quot;},&quot;rules1&quot;:{&quot;tag_name&quot;:&quot;canvas&quot;,&quot;htmlcode&quot;:&quot;&lt;img src=\&quot;[canvas]\&quot; width=\&quot;100\&quot; height=\&quot;60\&quot; \/&gt;&quot;,&quot;htmlcode_no&quot;:&quot;There is no canvas image&quot;},&quot;rules2&quot;:{&quot;tag_name&quot;:&quot;Linked_name&quot;,&quot;htmlcode&quot;:&quot;&lt;a href=\&quot;cb-profile\/[user_id]\&quot;&gt;[name]&lt;\/a&gt;&quot;,&quot;htmlcode_no&quot;:&quot;Not used with a custom tag name&quot;}}'
+				label="Rules"
+				description="Here you can create a rule for each tag"
+				multiple="true"
+				min="0"
+				max="10"
+				>
+				<form>
+					<field
+						name="tag_name"
+						default=""
+						type="text"
+						label="tag name"
+						description=""
+						/>
+					<field
+						name="htmlcode"
+						type="textarea"
+						default=""
+						label="html code to replace tag with"
+						filter="raw"
+						description="Insert here your html code. You can use [IMAGE] to insert the image link"
+						cols="20"
+						rows="4"
+						/>
+					<field
+						name="htmlcode_no"
+						type="textarea"
+						default=""
+						label="html code to replace tag with when there is no data available"
+						filter="raw"
+						description="Insert here your html code to place when no data is available"
+						cols="20"
+						rows="4"
+						/>
+				</form>
+			</field>	
+							
+							
+						
+		<field
+			name="text-below"
+			type="editor"
+			label="Text to be included UNDER the user list"
+				buttons="false"
+				filter="raw" />
+		  <field 
+			 	name="debug" type="radio"
+				default="0"
+				label="Turn on DEBUG output to help find errors in list filter (make sure to turn off in production)."
+				>
+					<option value="0">OFF</option>
+					<option value="1">ON</option>
+				</field>			
+    		</fieldset>
+		</fields>
+    </config>
+    <updateservers>
+      <server type="extension" priority="2" name="Community Builder list module">https://raw.githubusercontent.com/tazzios/cblistmodule/master/updates.xml</server>
+    </updateservers>
+</extension>
