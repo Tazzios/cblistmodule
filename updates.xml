@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<updates>
+    <update>
+        <name>Community Builder list module</name>
+        <description>Community Builder list module</description>
+        <element>mod_cblistmodule</element>
+        <type>module</type>
+        <version>3.0</version>
+        <infourl title="Release notes">https://github.com/Tazzios/cblistmodule/blob/main/Changelog.md</infourl>
+        <downloads>
+            <downloadurl type="full" format="zip">https://github.com/Tazzios/listmodule/</downloadurl>
+        </downloads>
+        <tags>
+            <tag>stable</tag>
+        </tags>
+        <maintainer>Magnus Hasselquist</maintainer>
+        <maintainerurl>https://github.com/magnushasselquist</maintainerurl>
+        <targetplatform name="joomla" version="3.9"/>
+        <client>site</client>
+    </update>
+</updates>
