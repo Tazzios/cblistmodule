@@ -14,7 +14,7 @@ Back-end configuration:
 ![cblistbackend](https://user-images.githubusercontent.com/23451105/120667634-f84a8c00-c48d-11eb-9cd5-a8e6279bb936.png)
 
 ## Configuration  
-The only mandatory configuration for the module is selecting a CB list to show the users from.
+The only mandatory configuration for the module is selecting a CB list to show the users from. all other settings have default options which you can change.
 
 ### template examples:
 ``` html
