@@ -5,6 +5,8 @@
 The purpose of this module is to present a Community Builder list of Users with a custom presentation-template with the possibility of using/presenting all user fields from CB and Joomla.
 This is a fork of https://github.com/magnushasselquist/hqcblistmodule
 
+You can also find it on joomla: https://extensions.joomla.org/extension/extension-specific/community-builder-extensions/community-builder-list/
+
 ## Screenshots
 
 Example of presentation in front-end:  
