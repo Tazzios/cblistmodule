@@ -1,9 +1,11 @@
 
-# Community Builder  List for Community Builder
+# Community Builder user list module
 
 ## Description
 The purpose of this module is to present a Community Builder list of Users with a custom presentation-template with the possibility of using/presenting all user fields from CB and Joomla.
 This is a fork of https://github.com/magnushasselquist/hqcblistmodule
+
+You can also find it on joomla: https://extensions.joomla.org/extension/extension-specific/community-builder-extensions/community-builder-list/
 
 ## Screenshots
 
@@ -14,7 +16,7 @@ Back-end configuration:
 ![cblistbackend](https://user-images.githubusercontent.com/23451105/120667634-f84a8c00-c48d-11eb-9cd5-a8e6279bb936.png)
 
 ## Configuration  
-The only mandatory configuration for the module is selecting a CB list to show the users from.
+The only mandatory configuration for the module is selecting a CB list to show the users from. all other settings have default options which you can change.
 
 ### template examples:
 ``` html
