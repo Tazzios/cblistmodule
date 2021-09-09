@@ -246,7 +246,7 @@ class modcbListHelper
 									$include .= ", " ;
 								}
 
-								// place qoutes if text
+								// place quotes if text
 								if (!is_numeric($value)) {
 									$value = "'".$filter['value']."'";
 								} 
@@ -258,7 +258,7 @@ class modcbListHelper
 							break;
 
 						default:
-							// Default wat to proces json values to query 
+							// Default wat to process json values to query
 							$select_sql .=  "(".$filter['column']." ".$filter['operator']." ".$value.")";
 							break;
 					}
@@ -278,13 +278,11 @@ class modcbListHelper
 
 		// Sort order 
 	   switch  ($list_sortorder) {
-		case "asc": 
+		   case "desc":
+		   case "asc":
 			$userlistorder = $list_orderby . " " . $list_sortorder;
 			break;
-		case "desc": 
-			$userlistorder = $list_orderby . " " . $list_sortorder;
-			break;
-		case "random": 
+		   case "random":
 			$userlistorder = 'rand()';
 			break;
 		default:
@@ -348,8 +346,8 @@ class modcbListHelper
 	
 	$result .= " </div >";
 			
-	$resultcomplete = $list_textabove . $debug_text . $result . $list_textbelow;
-	return $resultcomplete;
+
+	return $list_textabove . $debug_text . $result . $list_textbelow;
 
     	}
 }
