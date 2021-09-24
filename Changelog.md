@@ -1,3 +1,6 @@
+v3.0.1 sept 2021  
+Fix: User double shown if in multiple groups #1  
+  
 v3.0 jun 2021  
 New: function to replace tags with own HTML codes one for if data is available en one for when it is not. This way you do not have to work with script code.  
 Improved: Only approved images are shown.  
