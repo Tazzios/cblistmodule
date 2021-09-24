@@ -194,7 +194,13 @@ class modcbListHelper
 		// CB19 $select_sql = utf8_encode(substr(urldecode($select_sql_raw), 2, -1));
 		$json_a=json_decode($select_sql_raw,true);
 		$filters_basic = $json_a['filter_basic'];
-		$filter_advanced = $json_a['filter_advanced'];
+		
+		
+		if (isset($person[$fieldtouse]) ) {
+				$datatoinsert = $person[$fieldtouse];
+			} 
+		
+
 		if ($json_a['filter_mode'] == 0) {
 			$i = 0;
 			foreach ($filters_basic as $filter) {
@@ -268,7 +274,9 @@ class modcbListHelper
 		}
 		
 		else if ($json_a['filter_mode'] == 1) {
-	             $select_sql = $filter_advanced;
+				
+				$select_sql = $json_a['filter_advanced'];
+
 	    	}
 
 	if ($list_orderby=='list_default' or $list_orderby=='')  {
@@ -298,7 +306,7 @@ class modcbListHelper
         $list_show_unapproved = $json_a['list_show_unapproved'];
         $list_show_blocked = $json_a['list_show_blocked'];
         $list_show_unconfirmed = $json_a['list_show_unconfirmed'];
-        $fetch_sql = "SELECT ue.id FROM #__users u JOIN #__user_usergroup_map g ON g.`user_id` = u.`id` JOIN #__comprofiler ue ON ue.`id` = u.`id` WHERE g.group_id IN (".$usergroupids.")";
+        $fetch_sql = "SELECT DISTINCT ue.id FROM #__users u JOIN #__user_usergroup_map g ON g.`user_id` = u.`id` JOIN #__comprofiler ue ON ue.`id` = u.`id` WHERE g.group_id IN (".$usergroupids.")";
         if ($list_show_blocked == 0) {$fetch_sql.=" AND u.block = 0 ";}
         if ($list_show_unapproved == 0) {$fetch_sql.=" AND ue.approved = 1 ";} 
         if ($list_show_unconfirmed == 0) {$fetch_sql.=" AND ue.confirmed = 1 ";}

@@ -3,7 +3,7 @@
     <name>Community Builder list module</name>
     <author>Tazzios (original Magnus Hasselquist https://github.com/magnushasselquist/hqcblistmodule) </author>
     <authorUrl>https://github.com/Tazzios</authorUrl>
-    <version>3.0</version>
+    <version>3.0.1</version>
     <creationDate>2021-07-02</creationDate>
     <license>GNU General Public License version 2 or later</license>
     <description>Displaying Users from a selected CB List in a Module.</description>
