@@ -1,3 +1,6 @@
+v3.0.2 oct 2021  
+Fix: Changed default setting to prevent bug #2  
+  
 v3.0.1 sept 2021  
 Fix: User double shown if in multiple groups #1  
   
