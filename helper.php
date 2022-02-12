@@ -44,8 +44,9 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 		foreach ($fields as $field) { //for every field that may be in the before_str
 			$paramtofind = "[".$field['name']."]";
 			$fieldtouse = $field['name'];
+			$fieldtype = $field['type'];
 
-			$datatoinsert = '';
+			$datatoinsert = null;
 			//check if the fieldtouse exist (or is null)
 			if (isset($person[$fieldtouse]) ) {
 				$datatoinsert = $person[$fieldtouse];
@@ -53,10 +54,10 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 			
 
 					
-			// if it is an image check the approved and create full url
+			// if it is an image check the approved and create full url	
 			$show = 'yes';
-			if ($field['type']=='image') {
-				
+			if ($fieldtype=='image') {
+				 			
 				if ( $person[$fieldtouse.'approved']==0 or (empty($datatoinsert)) ) {
 					$show = 'no';
 				} else {
@@ -66,9 +67,38 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 					} 
 					//create the full image path
 					$datatoinsert =  JURI::base(). "images/comprofiler/" .$datatoinsert;
+
 				}
 			}
 			
+			//Fieldtypes with a label name in the comprofiler_field_values
+			if ( !empty($datatoinsert) and ($fieldtype=='multicheckbox' or $fieldtype=='multiselect' or $fieldtype=='select' or $fieldtype=='radio')) {
+				
+
+				$values= explode("|*|", $datatoinsert);				
+				// clear unexploded data from data to insert
+				$datatoinsert= '';
+				
+				
+				foreach ($values as $value)	{
+					
+					//Get label from value
+					$dblabel = JFactory::getDbo();
+					$query = "select fieldlabel from #__comprofiler_field_values WHERE fieldtitle ='".$value. "'";
+					$dblabel->setQuery($query);
+					$labels = $dblabel->loadAssoc();
+				
+					foreach ($labels as $label) {
+						$datatoinsert .= $label. " " ;
+					}
+				
+
+				}  	
+				
+			}
+			
+			
+			// normal checkbox currently returns a 0 or 1 
 
 			//check if there is a rule for this field
 			if (null !==(array_search($fieldtouse,array_column($rules,'tag_name'))) ) {
@@ -190,16 +220,10 @@ class modcbListHelper
 
 		if ($list_debug == 1) { $debug_text .= "<p>DEBUG: <pre>".$select_sql_raw."</pre></p>"; }
 
-		// Process the filterfields to make ut useful for next query
+		// Process the filterfields to make it usefull for next query
 		// CB19 $select_sql = utf8_encode(substr(urldecode($select_sql_raw), 2, -1));
 		$json_a=json_decode($select_sql_raw,true);
-		$filters_basic = $json_a['filter_basic'];
-		
-		
-		if (isset($person[$fieldtouse]) ) {
-				$datatoinsert = $person[$fieldtouse];
-			} 
-		
+		$filters_basic = $json_a['filter_basic'];	
 
 		if ($json_a['filter_mode'] == 0) {
 			$i = 0;
