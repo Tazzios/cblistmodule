@@ -93,7 +93,7 @@
 				<field
 				name="rules"
 				type="subform"
-				default='{&quot;rules0&quot;:{&quot;tag_name&quot;:&quot;show_avatar&quot;,&quot;htmlcode&quot;:&quot;&lt;a href=\&quot;cb-profile\/[user_id]\&quot;&gt;&lt;img src=\&quot;[avatar_N]\&quot; alt=\&quot;[name]\&quot; title=\&quot;[name]\&quot; width=\&quot;80\&quot; height=\&quot;80\&quot; \/&gt;&lt;\/a&gt;&quot;,&quot;htmlcode_no&quot;:&quot;Not used with a custom tag name&quot;},&quot;rules3&quot;:{&quot;tag_name&quot;:&quot;avatar_N&quot;,&quot;htmlcode&quot;:&quot;[avatar]&quot;,&quot;htmlcode_no&quot;:&quot;components\/com_comprofiler\/plugin\/templates\/default\/images\/avatar\/tnnophoto_n.png&quot;},&quot;rules1&quot;:{&quot;tag_name&quot;:&quot;canvas_N&quot;,&quot;htmlcode&quot;:&quot;&lt;img src=\&quot;[canvas]\&quot; width=\&quot;100\&quot; height=\&quot;60\&quot; \/&gt;&quot;,&quot;htmlcode_no&quot;:&quot;There is no canvas image&quot;},&quot;rules2&quot;:{&quot;tag_name&quot;:&quot;Linked_name&quot;,&quot;htmlcode&quot;:&quot;&lt;a href=\&quot;cb-profile\/[user_id]\&quot;&gt;[name]&lt;\/a&gt;&quot;,&quot;htmlcode_no&quot;:&quot;Not used with a custom tag name&quot;}}'
+				default='{&quot;rules0&quot;:{&quot;tag_name&quot;:&quot;avatar&quot;,&quot;htmlcode&quot;:&quot;[avatar]&quot;,&quot;htmlcode_no&quot;:&quot;components\/com_comprofiler\/plugin\/templates\/default\/images\/avatar\/tnnophoto_n.png&quot;},&quot;rules1&quot;:{&quot;tag_name&quot;:&quot;show_avatar&quot;,&quot;htmlcode&quot;:&quot;&lt;a href=\&quot;cb-profile\/[user_id]\&quot;&gt;&lt;img src=\&quot;[avatar]\&quot; alt=\&quot;[name]\&quot; title=\&quot;[name]\&quot; width=\&quot;80\&quot; height=\&quot;80\&quot; \/&gt;&lt;\/a&gt;&quot;,&quot;htmlcode_no&quot;:&quot;Not used with a custom tag name&quot;},&quot;rules2&quot;:{&quot;tag_name&quot;:&quot;canvas&quot;,&quot;htmlcode&quot;:&quot;&lt;img src=\&quot;[canvas]\&quot; width=\&quot;100\&quot; height=\&quot;60\&quot; \/&gt;&quot;,&quot;htmlcode_no&quot;:&quot;There is no canvas image&quot;},&quot;rules3&quot;:{&quot;tag_name&quot;:&quot;Linked_name&quot;,&quot;htmlcode&quot;:&quot;&lt;a href=\&quot;cb-profile\/[user_id]\&quot;&gt;[name]&lt;\/a&gt;&quot;,&quot;htmlcode_no&quot;:&quot;Not used with a custom tag name&quot;}}'
 				label="Rules"
 				description="Here you can create a rule for each tag"
 				multiple="true"
@@ -114,7 +114,7 @@
 						default=""
 						label="html code to replace tag with"
 						filter="raw"
-						description="Insert here your html code. You can use [IMAGE] to insert the image link"
+						description="Insert here your html code to show when data is available. You can use tags like [name]."
 						cols="20"
 						rows="4"
 						/>
