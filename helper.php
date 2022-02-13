@@ -72,6 +72,7 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 			}
 			
 			//Fieldtypes with a label name in the comprofiler_field_values
+			// normal checkbox currently returns a 0 or 1
 			if ( !empty($datatoinsert) and ($fieldtype=='multicheckbox' or $fieldtype=='multiselect' or $fieldtype=='select' or $fieldtype=='radio')) {
 				
 
@@ -88,17 +89,21 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 					$dblabel->setQuery($query);
 					$labels = $dblabel->loadAssoc();
 				
-					foreach ($labels as $label) {
-						$datatoinsert .= $label. " " ;
+					foreach ($labels as $label) {			
+						if(empty($label)) { 
+						$datatoinsert .= $value. " " ;
+						}
+						else{
+							$datatoinsert .= $label. " " ;
+						}
 					}
-				
 
 				}  	
 				
-			}
+			}	
 			
-			
-			// normal checkbox currently returns a 0 or 1 
+			 
+
 
 			//check if there is a rule for this field
 			if (null !==(array_search($fieldtouse,array_column($rules,'tag_name'))) ) {
@@ -109,13 +114,11 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 					// If the rule is found:
 					if (strtolower($rule['tag_name']) == $fieldtouse) {
 						
-						// check if show still true and data is not empty or that it is a custom tag created in the module.
-						if ($show == 'yes' and ((!empty($datatoinsert)) or $field['type']=='custom') ) {
-							$datatoinsert = str_ireplace($paramtofind, $datatoinsert, $rule['htmlcode']);
-							
+						// check if show still true and data is not empty or that it is a custom tag created in the module.				
+						if ($show == 'yes' and ((!empty($datatoinsert)) or $fieldtype=='custom') ) {
+							$datatoinsert = str_ireplace($paramtofind, $datatoinsert, $rule['htmlcode']);						
 						} else {	
-							$datatoinsert = str_ireplace($paramtofind, $datatoinsert, $rule['htmlcode_no']);
-							
+							$datatoinsert = str_ireplace($paramtofind, $datatoinsert, $rule['htmlcode_no']);	
 						}
 					} 
 				}  	
@@ -171,7 +174,7 @@ class modcbListHelper
 		// add additional names created in the parameters 
 		$query .= $additional_names ;
 		// retrieve fields from type images as first. this way other tags in the htmlcode then from the image will also be replaced without additional while loop
-		$query .=  " order by FIELD(type,'datetime','image') desc";
+		$query .=  " order by FIELD(type,'image') desc";
 		$db->setQuery($query);
 		$fields = $db->loadAssocList();
 		
