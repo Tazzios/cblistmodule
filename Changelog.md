@@ -1,3 +1,9 @@
+v3.0.3 febr 2022  
+Fix: #2 broke the image when there was no avatar (fix is for new modules only)  
+Improve: Checked J4 compactibility #3  
+Improve: Show label instead of value for multicheckbox, multiselect, select and radio field types #4  
+
+
 v3.0.2 oct 2021  
 Fix: Changed default setting to prevent bug #2  
   
