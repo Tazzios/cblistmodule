@@ -7,8 +7,8 @@ This is a fork of https://github.com/magnushasselquist/hqcblistmodule
 
 You can also find it on joomla: https://extensions.joomla.org/extension/extension-specific/community-builder-extensions/community-builder-list/
 
-## Screenshots
-
+## Examples
+[Demo website](https://marijqg132.132.axc.nl/demo/)  
 Example of presentation in front-end:  
 ![cblistfront](https://user-images.githubusercontent.com/23451105/120665837-6a21d600-c48c-11eb-9815-c243f2310b37.png)
 
