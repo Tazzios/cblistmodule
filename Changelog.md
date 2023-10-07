@@ -1,9 +1,14 @@
+v3.0.4 oct 2023  
+Improve: PHP warnings when multifield options has changes #7 (@magnushasselquist)  
+Improve: PHP warnings when a list is not filtered #8 (@magnushasselquist)  
+Improve: Split the createcblist code to a seperate function for maintenance.  
+Improve: Removed tmpl folder because not used.  
+  
 v3.0.3 febr 2022  
-Fix: #2 broke the image when there was no avatar (fix is for new modules only)  
+Fix: Broke the image when there was no avatar (fix is for new modules only) #2  
 Improve: Checked J4 compactibility #3  
 Improve: Show label instead of value for multicheckbox, multiselect, select and radio field types #4  
-
-
+  
 v3.0.2 oct 2021  
 Fix: Changed default setting to prevent bug #2  
   
