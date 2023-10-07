@@ -88,14 +88,20 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 					$query = "select fieldlabel from #__comprofiler_field_values WHERE fieldtitle ='".$value. "'";
 					$dblabel->setQuery($query);
 					$labels = $dblabel->loadAssoc();
+
+					if (is_iterable($labels)) {
 				
-					foreach ($labels as $label) {			
-						if(empty($label)) { 
-						$datatoinsert .= $value. " " ;
+						foreach ($labels as $label) {			
+							if(empty($label)) { 
+							$datatoinsert .= $value. " " ;
+							}
+							else{
+								$datatoinsert .= $label. " " ;
+							}
 						}
-						else{
-							$datatoinsert .= $label. " " ;
-						}
+
+					} else  {
+						print("Can't iterate array\n");					
 					}
 
 				}  	
@@ -116,15 +122,15 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 						
 						// check if show still true and data is not empty or that it is a custom tag created in the module.				
 						if ($show == 'yes' and ((!empty($datatoinsert)) or $fieldtype=='custom') ) {
-							$datatoinsert = str_ireplace($paramtofind, $datatoinsert, $rule['htmlcode']);						
+							$datatoinsert = str_ireplace($paramtofind, ($datatoinsert ?? ''), $rule['htmlcode']);						
 						} else {	
-							$datatoinsert = str_ireplace($paramtofind, $datatoinsert, $rule['htmlcode_no']);	
+							$datatoinsert = str_ireplace($paramtofind, ($datatoinsert ?? ''), $rule['htmlcode_no']);	
 						}
 					} 
 				}  	
 			} 
 				 
-			$after_str = str_ireplace($paramtofind, $datatoinsert, $after_str); // replace the param name with '' if not found.
+			$after_str = str_ireplace($paramtofind, ($datatoinsert ?? ''), $after_str); // replace the param name with '' if not found.
 					
 		} // end for each fields
 	}//  end while
@@ -226,7 +232,7 @@ class modcbListHelper
 		// Process the filterfields to make it usefull for next query
 		// CB19 $select_sql = utf8_encode(substr(urldecode($select_sql_raw), 2, -1));
 		$json_a=json_decode($select_sql_raw,true);
-		$filters_basic = $json_a['filter_basic'];	
+		if (isset($json_a['filter_basic'])) $filters_basic = $json_a['filter_basic'];	
 
 		if ($json_a['filter_mode'] == 0) {
 			$i = 0;
