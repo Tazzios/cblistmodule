@@ -1,4 +1,4 @@
-<?php
+<?php 
 /**
  * @copyright   Copyright (C) 2014. All rights reserved.
  * @license     GNU General Public License version 2 or later.
@@ -9,6 +9,8 @@
 // No direct access
 defined('_JEXEC') or die;
 
+
+require_once( dirname(__FILE__) . '/cblisthelper.php' );
 
 function checkString(array $arr, $str) {
 
@@ -81,6 +83,7 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 				$datatoinsert= '';
 				
 				
+			
 				foreach ($values as $value)	{
 					
 					//Get label from value
@@ -88,9 +91,8 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 					$query = "select fieldlabel from #__comprofiler_field_values WHERE fieldtitle ='".$value. "'";
 					$dblabel->setQuery($query);
 					$labels = $dblabel->loadAssoc();
-
-					if (is_iterable($labels)) {
 				
+					if (is_iterable($labels)) {
 						foreach ($labels as $label) {			
 							if(empty($label)) { 
 							$datatoinsert .= $value. " " ;
@@ -99,18 +101,14 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 								$datatoinsert .= $label. " " ;
 							}
 						}
-
-					} else  {
+					}
+					else  {
 						print("Can't iterate array\n");					
 					}
-
-				}  	
-				
-			}	
+				}
+			}
 			
 			 
-
-
 			//check if there is a rule for this field
 			if (null !==(array_search($fieldtouse,array_column($rules,'tag_name'))) ) {
 				
@@ -150,8 +148,13 @@ class modcbListHelper
 	 
 
 
-	public static function getData( $params )
+
+
+
+public static function getData( $params )
 	{
+		
+		
 		
 		//retrieve $rules
 		$subform = $params->get('rules');
@@ -201,157 +204,41 @@ class modcbListHelper
 		$list_template = $params->get('template');
 		$list_textabove = $params->get('text-above');
 		$list_textbelow = $params->get('text-below');
-		$list_debug = $params->get('debug');		
+		$list_debug = $params->get('debug');	
 
-		// Obtain a database connection
-		$db = JFactory::getDbo();
-		// Lets make sure to support åäö
-		// $query = "SET CHARACTER SET utf8";
-		// $db->setQuery($query);
 
-		// Retrieve the selected list
-		$query = $db->getQuery(true)
-		->select('params')
-		->select('usergroupids')		
-		->from('#__comprofiler_lists')
-		->where('listid = '. $list_id . ' AND published=1')
-			->order('ordering ASC');
-		// echo $query;
-		$db->setQuery($query);
-
-		// Load the List row.
-		$row = $db->loadAssoc();
-		$select_sql_raw = $row['params'];
-		$select_sql =""; //declare variable	
-
-		// avoid  Notice Undefined variable:
-		$debug_text ="";
-
-		if ($list_debug == 1) { $debug_text .= "<p>DEBUG: <pre>".$select_sql_raw."</pre></p>"; }
-
-		// Process the filterfields to make it usefull for next query
-		// CB19 $select_sql = utf8_encode(substr(urldecode($select_sql_raw), 2, -1));
-		$json_a=json_decode($select_sql_raw,true);
-		if (isset($json_a['filter_basic'])) $filters_basic = $json_a['filter_basic'];	
-
-		if ($json_a['filter_mode'] == 0) {
-			$i = 0;
-			foreach ($filters_basic as $filter) {
-			if ($filter['column']<>'') {	
-					// If it is not the first filter add AND 
-					if ($i>0)  {
-						$select_sql .= " AND " ;
-					}
-
-					// add qoutes if value is text.
-					if (!is_numeric($filter['value'])) {
-						$value = "'".$filter['value']."'";
-					} else {
-						$value = $filter['value'];	
-					}
-
-					// Replace operators from json if needed else default
-				   switch  ($filter['operator']) {
-						case "<>||ISNULL": // CB Not equal to
-
-							$select_sql .=  "(".$filter['column'] . "<> ".$value ." OR ". $filter['column'] . " IS NULL)";
-							break;
-
-						case "NOT REGEXP||ISNULL": // CB  is not regexp
-
-							$select_sql .=  "(".$filter['column'] . " NOT REGEXP ".$value ." OR ". $filter['column'] . " IS NULL)";
-							break;
-
-						case "NOT LIKE||ISNULL"; //CB Does not contain	
-
-							$value = "'%" . trim($value,'\'"') . "%'"; // any combination of ' and "
-							$select_sql .=  "(".$filter['column'] . " NOT LIKE ".$value ." OR ". $filter['column'] . " IS NULL)";
-							break;
-						   
-						case "LIKE"; //CB Does contain	
-
-							$value = "'%" . trim($value,'\'"') . "%'"; // any combination of ' and "
-							$select_sql =  "(".$filter['column'] . " LIKE " . $value . ")"	; 		
-							break;
-
-						case "IN"; //CB IN	
-
-							$i = 0;
-							$include = "";
-							//loop al the values from the in filter value. Fetch original value so no aurrounding qoutes are present
-							foreach ((explode(",",$filter['value'])) as $value) {						
-								// Start with separator is not first one.
-								if ($i>0)  {
-									$include .= ", " ;
-								}
-
-								// place quotes if text
-								if (!is_numeric($value)) {
-									$value = "'".$filter['value']."'";
-								} 
-
-								$include .= "".$value."";
-								$i++; 
-							}
-							$select_sql .=  "".$filter['column'] . " IN (". $include .") ";
-							break;
-
-						default:
-							// Default wat to process json values to query
-							$select_sql .=  "(".$filter['column']." ".$filter['operator']." ".$value.")";
-							break;
-					}
-				$i++; 
-				}
-			}
-		}
 		
-		else if ($json_a['filter_mode'] == 1) {
-				
-				$select_sql = $json_a['filter_advanced'];
-
-	    	}
-
+		$cblistqueryArray = createcblistquerymod($list_id,null);
+		$fetch_sql = $cblistqueryArray['cblistselect'];
+		$cblistsortby = $cblistqueryArray['cblistsortby'];
+		$cblistsortorder = $cblistqueryArray['cblistsortorder'];
+		
+		
 	if ($list_orderby=='list_default' or $list_orderby=='')  {
-		$list_orderby = $json_a['sort_basic'][0]['column']; 
+		$list_orderby = $cblistsortby; 
 	}
+	
 	
 
 		// Sort order 
 	   switch  ($list_sortorder) {
 		   case "desc":
 		   case "asc":
-			$userlistorder = $list_orderby . " " . $list_sortorder;
+			$userlistorder = " ORDER BY ". $list_orderby . " " . $list_sortorder;
 			break;
 		   case "random":
-			$userlistorder = 'rand()';
+			$userlistorder = ' ORDER BY rand()';
 			break;
 		default:
 			// Default way to order
-			$userlistorder = $list_orderby . " " . $json_a['sort_basic'][0]['direction'];
+			$userlistorder = " ORDER BY ". $list_orderby . " " . $cblistsortorder;
 			break;
 	   }
-
-	// Set a base-sql for connecting users, fields and lists
-    $usergroupids = str_replace("|*|", ",", $row['usergroupids']); //CMJ ADDED
-	$usergroupids = trim($usergroupids,','); // prevent that the range starts (or ends) with a comma if you also have selected '--- Select User group (CTR/CMD-Click: multiple)---' at the usergroups
-
-        $list_show_unapproved = $json_a['list_show_unapproved'];
-        $list_show_blocked = $json_a['list_show_blocked'];
-        $list_show_unconfirmed = $json_a['list_show_unconfirmed'];
-        $fetch_sql = "SELECT DISTINCT ue.id FROM #__users u JOIN #__user_usergroup_map g ON g.`user_id` = u.`id` JOIN #__comprofiler ue ON ue.`id` = u.`id` WHERE g.group_id IN (".$usergroupids.")";
-        if ($list_show_blocked == 0) {$fetch_sql.=" AND u.block = 0 ";}
-        if ($list_show_unapproved == 0) {$fetch_sql.=" AND ue.approved = 1 ";} 
-        if ($list_show_unconfirmed == 0) {$fetch_sql.=" AND ue.confirmed = 1 ";}
-
-
-	// add CB list filters only if there are any
-     if ($select_sql <>'') $fetch_sql = $fetch_sql . " AND (" . $select_sql . ")";
 
 	// echo $fetch_sql . "<br>";
 	//$fetch_sql .= ' GROUP BY u.id';
 	//Add ordering if list is configured for that
-	if ($userlistorder <>'') { $fetch_sql .= " ORDER BY ".$userlistorder; }
+	if ($userlistorder <>'') { $fetch_sql .= " ".$userlistorder; }
 		
 	//Apply limit
 	$fetch_sql .= " LIMIT ".$params->get('user-limit');
@@ -373,8 +260,9 @@ class modcbListHelper
 
 	// Now, lets use the final SQL to get all Users from Joomla/CB
 	$query = $fetch_sql;
-					
-	if ($list_debug == 1) { $debug_text .= "<p>DEBUG: <pre>".$query."</pre></p>"; }
+	
+	$debug_text= '';				
+	if ($list_debug == 1) {  $debug_text .= "<p>DEBUG: <pre>".$query."</pre></p>"; }
 	$db->setQuery($query);
 	$persons = $db->loadAssocList();
 	if (!empty($persons)){
