@@ -90,7 +90,7 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 					$dblabel = JFactory::getDbo();
 					$query = "select fieldlabel from #__comprofiler_field_values WHERE fieldtitle ='".$value. "'";
 					$dblabel->setQuery($query);
-					$labels = $dblabel->loadAssoc();
+					$labels = (array) $dblabel->loadAssoc();
 				
 					if (is_iterable($labels)) {
 						foreach ($labels as $label) {			
