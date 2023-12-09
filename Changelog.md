@@ -1,3 +1,6 @@
+v3.0.5 (not released)  
+Fix: Escape special chars for value #11
+
 v3.0.4 oct 2023  
 Improve: PHP warnings when multifield options has changes #7 (@magnushasselquist)  
 Improve: PHP warnings when a list is not filtered #8 (@magnushasselquist)  

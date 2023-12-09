@@ -88,7 +88,7 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 					
 					//Get label from value
 					$dblabel = JFactory::getDbo();
-					$query = "select fieldlabel from #__comprofiler_field_values WHERE fieldtitle ='".$value. "'";
+					$query = "select fieldlabel from #__comprofiler_field_values WHERE fieldtitle ='". addslashes($value) . "'";
 					$dblabel->setQuery($query);
 					$labels = $dblabel->loadAssoc();
 				
