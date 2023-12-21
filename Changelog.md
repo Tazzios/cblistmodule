@@ -1,6 +1,6 @@
 v3.0.5 (not released)  
-New: field autorisation
-Fix: Escape special chars for value #11
+New: field autorisation  
+Fix: Escape special chars for value #11  
 Fix: Fix cast array Update helper.php #10 (@magnushasselquist) 
 
 v3.0.4 oct 2023  
