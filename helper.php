@@ -193,7 +193,7 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 			if ($fieldtype=='image') {
 				 			
 				if ( $person[$fieldtouse.'approved']==0 or (empty($datatoinsert)) ) {
-					$show = 'no';
+					$datatoinsert = 'nofoto';
 				} else {
 					//url to the default canvas images are incorrect in stored in the database 
 					if ($fieldtouse=='canvas') {
@@ -201,7 +201,6 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 					} 
 					//create the full image path
 					$datatoinsert =  JURI::base(). "images/comprofiler/" .$datatoinsert;
-
 				}
 			}
 			
@@ -241,13 +240,12 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 			
 			 
 			//check if there is a rule for this field
-			if (null !==(array_search($fieldtouse,array_column($rules,'tag_name'))) ) {
+			if ((array_search($fieldtouse,array_column($rules,'tag_name'))) == true ) {
 				
-				//loop through the rules to find the rule	
-				foreach ($rules as $rule)	{
+				$rule_id = array_search($fieldtouse,array_column($rules,'tag_name'));
 					
 					// If the rule is found:
-					if (strtolower($rule['tag_name']) == $fieldtouse) {
+					if (strtolower($rules[$rule_id]['tag_name']) == $fieldtouse) {
 									
 						/* Check if the rule has an usergroup set for autorisation*/
 						
@@ -255,26 +253,20 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 						$usergroups = JAccess::getGroupsByUser(JFactory::getUser()->get('id'), $recursive = true);
 						
 						$autorised = false;
-						if (empty($rule['usergroups']) or array_sum(array_count_values(array_intersect($usergroups, $rule['usergroups'])))>0 ) { // if not set show the data
+						if (empty($rules[$rule_id]['usergroups']) or array_sum(array_count_values(array_intersect($usergroups, $rules[$rule_id]['usergroups'])))>0 ) { // if not set show the data
 							$autorised = true;	
 						}
-					/*	elseif (array_sum(array_count_values(array_intersect($usergroups, $rule['usergroups'])))>0) {
-						// compare user and usergroup values for matches. by summing the matching array ID`s. 
-							$autorised = true;	 		
-						}*/
 						
 						if ($autorised == true) {
 							// check if show image is true and data is not empty or that it is a custom tag created in the module.				
-							if ($show == 'yes'  and((!empty($datatoinsert)) or $fieldtype=='custom') ) {
-								$datatoinsert = str_ireplace($paramtofind, ($datatoinsert ?? ''), $rule['htmlcode']);						
+							if ( (!empty($datatoinsert)) or $fieldtype=='custom' ) {
+								$datatoinsert = str_ireplace($paramtofind, ($datatoinsert ?? ''), $rules[$rule_id]['htmlcode']);						
 							} else {	
-								$datatoinsert = str_ireplace($paramtofind, ($datatoinsert ?? ''), $rule['htmlcode_no']);	
+								$datatoinsert = str_ireplace($paramtofind, ($datatoinsert ?? ''), $rules[$rule_id]['htmlcode_no']);	
 							}
-						}
-												
-						
+						}	
 					} 
-				}  	
+				//}  	
 			} 
 				 
 			$after_str = str_ireplace($paramtofind, ($datatoinsert ?? ''), $after_str); // replace the param name with '' if not found.
