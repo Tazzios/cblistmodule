@@ -107,6 +107,12 @@
 						label="tag name"
 						description=""
 						/>
+					<field 
+						name="usergroups" type="usergrouplist"
+						label="Usergroup"
+						description="Select the usergroups which can see this fiels" 
+						multiple="true" 
+						/>
 					<field
 						name="htmlcode"
 						type="textarea"
