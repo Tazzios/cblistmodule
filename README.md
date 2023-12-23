@@ -13,7 +13,7 @@ Example of presentation in front-end:
 ![cblistfront](https://user-images.githubusercontent.com/23451105/120665837-6a21d600-c48c-11eb-9815-c243f2310b37.png)
 
 Back-end configuration:
-![cblistbackend](https://user-images.githubusercontent.com/23451105/120667634-f84a8c00-c48d-11eb-9cd5-a8e6279bb936.png)
+![config](https://github.com/Tazzios/cblistmodule/assets/23451105/9f0f5639-8138-4484-9b43-bb955efdd57d)
 
 ## Configuration  
 The only mandatory configuration for the module is selecting a CB list to show the users from. all other settings have default options which you can change.
