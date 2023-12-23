@@ -264,9 +264,11 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 							} else {	
 								$datatoinsert = str_ireplace($paramtofind, ($datatoinsert ?? ''), $rules[$rule_id]['htmlcode_no']);	
 							}
+						}else {
+							//Set to empty when not autorised
+							$datatoinsert= null;
 						}	
-					} 
-				//}  	
+					} 	
 			} 
 				 
 			$after_str = str_ireplace($paramtofind, ($datatoinsert ?? ''), $after_str); // replace the param name with '' if not found.

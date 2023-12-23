@@ -27,3 +27,9 @@ The only mandatory configuration for the module is selecting a CB list to show t
 ### rule examples;
 A basic set of rules will be created when creating the module.
 When creating custom tags make sure the tags that you are using within always have a value. For example see the avatar rule and show_avatar rule.
+  
+You can also show fields only to specific usergroups. 
+For existing databace fields like cb_example you can also create a rule to set autorisation on by creatign the following rule:
+tag name:  cb_example
+Usergroup: to what you want
+htmlcode to replace tag with: [cb_example]
