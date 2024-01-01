@@ -1,6 +1,6 @@
 v3.0.5 (not released)  
 Add: field autorisation, also works for existing fields  #12
-Improved: replaced a foreach for something more efficient
+Improved: replaced a foreach for something more efficient  
 Fix: Escape special chars for value #11  
 Fix: Fix cast array Update helper.php #10 (@magnushasselquist) 
 

@@ -39,34 +39,30 @@ public static function getData( $params )
 		$additional_names = '';
 		foreach ($arr as $value)
 		{
+			
 			$rules[$i]['tag_name']= strtolower($value->tag_name);
-			$rules[$i]['usergroups']= $value->usergroups;
+			$rules[$i]['accesslevel']= $value->accesslevel;
 			$rules[$i]['htmlcode'] = $value->htmlcode;
 			$rules[$i]['htmlcode_no'] = $value->htmlcode_no;
 			
-			$additional_names .= " UNION SELECT '". strtolower($value->tag_name). "' AS name, 'custom' as type  ";
+			$additional_names .= " UNION SELECT '". strtolower($value->tag_name). "' AS name, 'rule' as type ";
 			
-			$i++;
+			$i++;			
 		}
-		
+
 		
 		// get all the fields that could possibly be part of template to be replaced to get us something to loop through. Also add id and user_id as fields.
 		$db = JFactory::getDbo();
-		$query = "SELECT name, type FROM #__comprofiler_fields WHERE (#__comprofiler_fields.table = '#__users' OR #__comprofiler_fields.table = '#__comprofiler') and name not in ('password','params')
-			UNION SELECT 'id' AS name, '' as type 
-			UNION SELECT 'user_id' AS name, '' as type  ";
+		$query = "SELECT fields.name, fields.type FROM #__comprofiler_fields as fields
+			WHERE (fields.table = '#__users' OR fields.table = '#__comprofiler') and name not in ('password','params')
+			UNION SELECT 'id' AS name, 'id' as type 
+			UNION SELECT 'user_id' AS name, 'id' as type   ";
 		// add additional names created in the parameters 
 		$query .= $additional_names ;
 		// retrieve fields from type images as first. this way other tags in the htmlcode then from the image will also be replaced without additional while loop
-		$query .=  " order by FIELD(type,'image') desc";
+		$query .=  " order by FIELD(type,'image' ) desc";
 		$db->setQuery($query);
 		$fields = $db->loadAssocList();
-		
-		// create an one row array with paramtofind to use for the while check
-		$search_paramtofind = array ();
-		foreach ($fields as $field) {
-			$search_paramtofind[] = "[".$field['name']."]";
-		}
 
 
     	$result=''; //reset result
@@ -138,10 +134,9 @@ public static function getData( $params )
 	$db->setQuery($fetch_sql);
 	$persons = $db->loadAssocList();
 	if (!empty($persons)){
-		foreach ($persons as $person) { //for every person that is a reciever, lets do an email.
-		 	// $result .= $person['username']."<br/>";
+		foreach ($persons as $person) {  
 		 	// Lets loop over the Users and create the output using the Template, replacing [fileds] in Template
-			$result .= "<div style=\"padding: 5px;overflow-wrap: break-word;\" class=\"cblist-user\" >". db_field_replace($list_template, $person['id'],$rules,$fields,$search_paramtofind) ."</div >" ;
+			$result .= "<div style=\"padding: 5px;overflow-wrap: break-word;\" class=\"cblist-user\" >". db_field_replace($list_template, $person['id'],$rules,$fields) ."</div >" ;
 		}
 	} else if ($list_debug == 1) { $debug_text .= "<p>DEBUG: Empty list?!</p>"; }
 	
@@ -155,7 +150,7 @@ public static function getData( $params )
 		
 }
 
-function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofind) {
+function db_field_replace($before_str, $user_id,$rules,$fields) {
 	
 	//Get data from current user
 	$db = JFactory::getDbo();
@@ -170,8 +165,9 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 	// The while will only run multiple times if you have complex rules like using [canvas] in your avatar htmlcode.
 	// With this while loop we are certain that all paramtofind will be replaced. 
 	$i=0; 
-	while ((str_replace($search_paramtofind, '', $after_str) !== $after_str) and $i<>5){	
+	while (/*(str_replace($search_paramtofind, '', $after_str) !== $after_str) and*/ $i<>4){	
 		$i++; // safety count to stop the loop if the user created one. While will run expected once or twice to replace everything.
+		
 		
 		foreach ($fields as $field) { //for every field that may be in the before_str
 			$paramtofind = "[".$field['name']."]";
@@ -180,7 +176,8 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 
 
 			/*set value to insert for normal fields*/ 
-			$datatoinsert = null;
+			$datatoinsert = null;			
+			
 			//check if the fieldtouse exist (or is null)
 			if (isset($person[$fieldtouse]) ) {
 				$datatoinsert = $person[$fieldtouse];
@@ -189,11 +186,12 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 
 			/*set value to insert for images */ 
 			// if it is an image check the approved and create full url
-			$show = 'yes';			
-			if ($fieldtype=='image') {
-				 			
+			//if there is an '[fieldname]approved' column it is an image. By checking the exsting of the column instead of type 'image' it will also be aplied to rules with the same name.
+			$show = true;			
+			if (isset($person[$fieldtouse.'approved']) ) {		
+								 			
 				if ( $person[$fieldtouse.'approved']==0 or (empty($datatoinsert)) ) {
-					$datatoinsert = 'nofoto';
+					$datatoinsert = 'no image available';
 				} else {
 					//url to the default canvas images are incorrect in stored in the database 
 					if ($fieldtouse=='canvas') {
@@ -207,15 +205,14 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 			
 			/*set value to insert for multiple value fields */ 
 			//Fieldtypes with a label name in the comprofiler_field_values
-			// normal checkbox currently returns a 0 or 1
+			// TODO normal checkbox currently returns a 0 or 1
 			if ( !empty($datatoinsert) and ($fieldtype=='multicheckbox' or $fieldtype=='multiselect' or $fieldtype=='select' or $fieldtype=='radio')) {
 				
 				$values= explode("|*|", $datatoinsert);				
 				// clear unexploded data from data to insert
 				$datatoinsert= '';
 					
-				foreach ($values as $value)	{
-					
+				foreach ($values as $value)	{			
 					//Get label from value
 					$dblabel = JFactory::getDbo();
 					$query = "select fieldlabel from #__comprofiler_field_values WHERE fieldtitle ='". addslashes($value) . "'";
@@ -226,53 +223,45 @@ function db_field_replace($before_str, $user_id,$rules,$fields,$search_paramtofi
 						foreach ($labels as $label) {			
 							if(empty($label)) { 
 							$datatoinsert .= $value. " " ;
-							}
-							else{
+							} else {
 								$datatoinsert .= $label. " " ;
 							}
 						}
-					}
-					else  {
+					} else {
 						print("Can't iterate array\n");					
 					}
 				}
-			}
-			
-			 
-			//check if there is a rule for this field
-			if ((array_search($fieldtouse,array_column($rules,'tag_name'))) == true ) {
+			}		
+			 			
+			// Check if there is an rule. A rule can have the same name as an CB field.
+			//array_search will return false of an array ID.
+			$rule_id = array_search($fieldtouse,array_column($rules,'tag_name'));				
+			if ( $rule_id !== false) {
+
+				// get usergroups from loggedin user
+				$user_accesslevels = JAccess::getAuthorisedViewLevels(JFactory::getUser()->get('id'), $recursive = true);
 				
-				$rule_id = array_search($fieldtouse,array_column($rules,'tag_name'));
-					
-					// If the rule is found:
-					if (strtolower($rules[$rule_id]['tag_name']) == $fieldtouse) {
-									
-						/* Check if the rule has an usergroup set for autorisation*/
-						
-						// get usergroups from loggedin user
-						$usergroups = JAccess::getGroupsByUser(JFactory::getUser()->get('id'), $recursive = true);
-						
-						$autorised = false;
-						if (empty($rules[$rule_id]['usergroups']) or array_sum(array_count_values(array_intersect($usergroups, $rules[$rule_id]['usergroups'])))>0 ) { // if not set show the data
-							$autorised = true;	
-						}
-						
-						if ($autorised == true) {
-							// check if show image is true and data is not empty or that it is a custom tag created in the module.				
-							if ( (!empty($datatoinsert)) or $fieldtype=='custom' ) {
-								$datatoinsert = str_ireplace($paramtofind, ($datatoinsert ?? ''), $rules[$rule_id]['htmlcode']);						
-							} else {	
-								$datatoinsert = str_ireplace($paramtofind, ($datatoinsert ?? ''), $rules[$rule_id]['htmlcode_no']);	
-							}
-						}else {
-							//Set to empty when not autorised
-							$datatoinsert= null;
-						}	
-					} 	
-			} 
-				 
+				$autorised = false;
+				if ( empty($rules[$rule_id]['accesslevel']) or array_sum(array_count_values(array_intersect($user_accesslevels, $rules[$rule_id]['accesslevel'])))>0 ) { // if not set show the data
+					$autorised = true;	
+				}
+				
+				if ($autorised == true) {
+					// check if (data is not empty or that it is a rule tag created) and incase of an image tag if there is an image to show.	
+					if  (  ( !empty($datatoinsert) or $fieldtype=='rule' ) and $datatoinsert != 'no image available')   {
+						$datatoinsert = str_ireplace($paramtofind, ($datatoinsert ), $rules[$rule_id]['htmlcode']);
+					} else {	
+						$datatoinsert =  str_ireplace($paramtofind, ($datatoinsert  ?? ''), $rules[$rule_id]['htmlcode_no'] );
+					}
+				} else {
+					//Set to empty when not autorised
+					$datatoinsert= null;
+				}	
+			}		
+		
 			$after_str = str_ireplace($paramtofind, ($datatoinsert ?? ''), $after_str); // replace the param name with '' if not found.
-					
+			
+	
 		} // end for each fields
 	}//  end while
 	
