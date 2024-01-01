@@ -1,9 +1,10 @@
-v3.0.5 (not released)  
-Add: field autorisation, also works for existing fields  #12
-Improved: replaced a foreach for something more efficient  
+v3.1.0 
+Add: field autorisation, also works for existing fields #12  
+Improved: removed a foreach for.  
+Improved: Order of the rules should have less influence on the result  
 Fix: Escape special chars for value #11  
-Fix: Fix cast array Update helper.php #10 (@magnushasselquist) 
-
+Fix: Fix cast array Update helper.php #10 (@magnushasselquist)  
+  
 v3.0.4 oct 2023  
 Improve: PHP warnings when multifield options has changes #7 (@magnushasselquist)  
 Improve: PHP warnings when a list is not filtered #8 (@magnushasselquist)  
