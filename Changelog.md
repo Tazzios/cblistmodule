@@ -1,4 +1,4 @@
-v3.1.0  
+v3.1.0   
 Add: field autorisation, also works for existing fields #12  
 Improved: removed a foreach for.  
 Improved: Order of the rules should have less influence on the result  
