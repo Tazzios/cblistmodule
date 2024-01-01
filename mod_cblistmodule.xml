@@ -3,8 +3,8 @@
     <name>Community Builder list module</name>
     <author>Tazzios (original Magnus Hasselquist https://github.com/magnushasselquist/hqcblistmodule) </author>
     <authorUrl>https://github.com/Tazzios</authorUrl>
-    <version>3.0.4</version>
-    <creationDate>October 2023</creationDate>
+    <version>3.1.0</version>
+    <creationDate>Januari 2024</creationDate>
     <license>GNU General Public License version 2 or later</license>
     <description>Displaying Users from a selected CB List in a Module.</description>
     <files>
@@ -106,6 +106,12 @@
 						type="text"
 						label="tag name"
 						description=""
+						/>
+					<field 
+						name="accesslevel" type="accesslevel"
+						label="accesslevel"
+						description="Select the accesslevel which can see this field" 
+						multiple="true" 
 						/>
 					<field
 						name="htmlcode"
