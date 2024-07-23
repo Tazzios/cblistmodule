@@ -56,7 +56,7 @@ public static function getData( $params )
 		// get all the fields that could possibly be part of template to be replaced to get us something to loop through. Also add id and user_id as fields.
 		$db = JFactory::getDbo();
 		$query = "SELECT fields.name, fields.type FROM #__comprofiler_fields as fields
-			WHERE (fields.table = '#__users' OR fields.table = '#__comprofiler') and name not in ('password','params')
+			WHERE (fields.table = '#__users' OR fields.table = '#__comprofiler') and name not in ('password','params') and fields.tablecolumns <> ''
 			UNION SELECT 'id' AS name, 'id' as type 
 			UNION SELECT 'user_id' AS name, 'id' as type   ";
 		// add additional names created in the parameters 

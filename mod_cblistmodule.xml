@@ -40,7 +40,7 @@
                		label="Order by field"
                		key_field="id"
                		value_field="title"
-               		query="SELECT 0 AS sort, 'list_default' AS id, 'List default' AS title UNION SELECT 1 AS sort, name AS id, name AS title FROM #__comprofiler_fields WHERE published=1 ORDER BY sort,title ASC" />
+               		query="SELECT 0 AS sort, 'list_default' AS id, 'List default' AS title UNION SELECT 1 AS sort, name AS id, name AS title FROM #__comprofiler_fields WHERE published=1 and tablecolumns <> '' ORDER BY sort,title ASC" />
 			<field 
 					name="sortorder" type="list"
 					default="list"
