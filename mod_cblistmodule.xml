@@ -110,7 +110,8 @@
 					<field 
 						name="accesslevel" type="accesslevel"
 						label="accesslevel"
-						description="Select the accesslevel which can see this field" 
+						description="Select the accesslevel which can see this field"
+						default="1"						
 						multiple="true" 
 						/>
 					<field

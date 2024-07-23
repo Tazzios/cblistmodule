@@ -40,8 +40,10 @@ public static function getData( $params )
 		foreach ($arr as $value)
 		{
 			
-			$rules[$i]['tag_name']= strtolower($value->tag_name);
-			$rules[$i]['accesslevel']= $value->accesslevel;
+			$rules[$i]['tag_name']= strtolower($value->tag_name);		
+			if (isset($value->accesslevel) ) {
+				$rules[$i]['accesslevel']= $value->accesslevel;
+			} 
 			$rules[$i]['htmlcode'] = $value->htmlcode;
 			$rules[$i]['htmlcode_no'] = $value->htmlcode_no;
 			
