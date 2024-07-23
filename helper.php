@@ -9,6 +9,8 @@
 // No direct access
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
+
 
 require_once( dirname(__FILE__) . '/cblisthelper.php' );
 
@@ -54,7 +56,7 @@ public static function getData( $params )
 
 		
 		// get all the fields that could possibly be part of template to be replaced to get us something to loop through. Also add id and user_id as fields.
-		$db = JFactory::getDbo();
+		$db = Factory::getDbo();
 		$query = "SELECT fields.name, fields.type FROM #__comprofiler_fields as fields
 			WHERE (fields.table = '#__users' OR fields.table = '#__comprofiler') and name not in ('password','params') and fields.tablecolumns <> ''
 			UNION SELECT 'id' AS name, 'id' as type 
@@ -155,7 +157,7 @@ public static function getData( $params )
 function db_field_replace($before_str, $user_id,$rules,$fields) {
 	
 	//Get data from current user
-	$db = JFactory::getDbo();
+	$db = Factory::getDbo();
 	$query = "select * from #__users inner join #__comprofiler on #__users.id = #__comprofiler.user_id WHERE #__users.id =".$user_id;
 	// echo $query;
 	$db->setQuery($query);
@@ -216,7 +218,7 @@ function db_field_replace($before_str, $user_id,$rules,$fields) {
 					
 				foreach ($values as $value)	{			
 					//Get label from value
-					$dblabel = JFactory::getDbo();
+					$dblabel = Factory::getDbo();
 					$query = "select fieldlabel from #__comprofiler_field_values WHERE fieldtitle ='". addslashes($value) . "'";
 					$dblabel->setQuery($query);
 					$labels = (array) $dblabel->loadAssoc();
@@ -241,7 +243,8 @@ function db_field_replace($before_str, $user_id,$rules,$fields) {
 			if ( $rule_id !== false) {
 
 				// get usergroups from loggedin user
-				$user_accesslevels = JAccess::getAuthorisedViewLevels(JFactory::getUser()->get('id'), $recursive = true);
+				$user = Factory::getUser();
+				$user_accesslevels = $user->getAuthorisedViewLevels();
 				
 				$autorised = false;
 				if ( empty($rules[$rule_id]['accesslevel']) or array_sum(array_count_values(array_intersect($user_accesslevels, $rules[$rule_id]['accesslevel'])))>0 ) { // if not set show the data

@@ -2,6 +2,7 @@
 
 defined('_JEXEC') or die;
 
+use Joomla\CMS\Factory;
 /* this file will build the query to get the profiles in the same way as the cblist.
 * By seperating it it can be easier used in other applications.
 * @copyright   2022
@@ -23,7 +24,7 @@ function createcblistquerymod($cblistid,$cblistname) {
 
 		
 	// Obtain a database connection
-	$db = JFactory::getDbo();
+	$db = Factory::getDbo();
 	// Retrieve the selected list
 	$query = $db->getQuery(true)
 	->select('params')
