@@ -251,7 +251,7 @@ function db_field_replace($before_str, $user_id,$rules,$fields) {
 				if ($autorised == true) {
 					// check if (data is not empty or that it is a rule tag created) and incase of an image tag if there is an image to show.	
 					if  (  ( !empty($datatoinsert) or $fieldtype=='rule' ) and $datatoinsert != 'no image available')   {
-						$datatoinsert = str_ireplace($paramtofind, ($datatoinsert ), $rules[$rule_id]['htmlcode']);
+						$datatoinsert = str_ireplace($paramtofind, ($datatoinsert ?? '' ), $rules[$rule_id]['htmlcode']);
 					} else {	
 						$datatoinsert =  str_ireplace($paramtofind, ($datatoinsert  ?? ''), $rules[$rule_id]['htmlcode_no'] );
 					}
