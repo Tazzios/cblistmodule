@@ -5,17 +5,17 @@
         <description>Community Builder list module</description>
         <element>mod_cblistmodule</element>
         <type>module</type>
-        <version>3.1.0</version>
+        <version>3.2.0</version>
         <infourl title="Release notes">https://github.com/Tazzios/cblistmodule/blob/main/Changelog.md</infourl>
         <downloads>
-            <downloadurl type="full" format="zip">https://github.com/Tazzios/cblistmodule/releases/download/v3.1.0/cblistmodule-3.1.0.zip</downloadurl>
+            <downloadurl type="full" format="zip">https://github.com/Tazzios/cblistmodule/releases/download/v3.2.0/cblistmodule-3.2.0.zip</downloadurl>
         </downloads>
         <tags>
             <tag>stable</tag>
         </tags>
         <maintainer>Tazzios</maintainer>
         <maintainerurl>https://github.com/Tazzios/cblistmodule/</maintainerurl>
-        <targetplatform name="joomla" version="3.10|4.*"/>
+        <targetplatform name="joomla" version="3.10|4.*|5.*"/>
         <client>site</client>
     </update>
 </updates>
