@@ -1,8 +1,8 @@
-v3.2.0 Jul 2024
-New: J5 native compatible 
-Fix: remove calculated fields from filter options #16
-Improve: Set default access level #14
-Improve: PHP warning Passing null to parameter #15
+v3.2.0 Jul 2024  
+New: J5 native compatible   
+Fix: remove calculated fields from filter options #16  
+Improve: Set default access level #14  
+Improve: PHP warning Passing null to parameter #15  
 
 v3.1.0 jan 2024   
 Add: field autorisation, also works for existing fields #12  
