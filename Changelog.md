@@ -1,3 +1,6 @@
+v3.6.0 September 2026  
+New: J6 native compatible  
+
 v3.2.0 Jul 2024  
 New: J5 native compatible   
 Fix: remove calculated fields from filter options #16  

@@ -10,7 +10,7 @@
 defined('_JEXEC') or die;
 
 use Joomla\CMS\Factory;
-
+use Joomla\CMS\Uri\Uri;
 
 require_once( dirname(__FILE__) . '/cblisthelper.php' );
 
@@ -202,7 +202,7 @@ function db_field_replace($before_str, $user_id,$rules,$fields) {
 						$datatoinsert = str_ireplace('Gallery/', 'gallery/canvas/', $datatoinsert);
 					} 
 					//create the full image path
-					$datatoinsert =  JURI::base(). "images/comprofiler/" .$datatoinsert;
+					$datatoinsert =  URI::base(). "images/comprofiler/" .$datatoinsert;
 				}
 			}
 			
